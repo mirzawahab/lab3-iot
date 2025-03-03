@@ -1,0 +1,136 @@
+22-NTU-CS-1337    ABDUL WAHAB
+
+Task 1: Displaying Temperature & Humidity on OLED 
+
+• Print the values of temperature and humidity on the OLED display. 
+
+ANS - Printed, i am attaching Video.
+
+• Try adding emojis for temperature and humidity to see if the OLED supports them.
+ 
+ANS - the ssd1306 library you're using does not support the blit() function for drawing custom icons.
+Since blit() is unavailable, we can directly draw pixel-based icons using framebuf. its not perfect but gd to show emoji.
+
+• Blow on the sensor and observe whether it detects minor changes in temperature 
+and humidity. 
+
+Ans- Yes, it minor changes With Blowing Air.
+
+_________________________________________________________________________
+Task 2: Running the Code Without Interrupt 
+• Run the same functionality of the lab work without interrupt & log your 
+observations. Also state, what happened before and after interrupt?
+ANS-
+Before Using Interrupts:
+Button Press Delay: The button press detection only happens when the loop runs, meaning there's a delay before detecting a press (because it's inside the while loop).
+Possible Missed Presses: If the microcontroller is busy reading the DHT22 sensor, a fast button press might be ignored.
+Inefficient Power Handling: The loop continuously checks the button state, which wastes CPU time.
+After Using Interrupts:
+Faster Button Response: With interrupts, the button is detected immediately, without waiting for the loop.
+More Efficient Execution: The microcontroller can focus on reading sensors, and only responds to the button when needed.
+No Missed Presses: Even if the DHT22 sensor is being read, button presses are still detected correctly.
+✅ Using interrupts is better for handling user input efficiently.
+✅ Without interrupts, the button response is slower and might miss fast presses.
+✅ Interrupts make the code more responsive and reduce CPU usage.
+_________________________________________________________________________
+
+Task 3: Understanding Debounce Issue 
+
+• What is a debounce issue and why we get rid of it? 
+
+Ans - The debounce issue occurs when a mechanical button or switch is pressed or released, causing multiple rapid signals instead of a single clean press.
+
+🛑 Why Does This Happen?
+When you press a button, it doesn’t make an instant ON/OFF connection.
+Instead, the contacts bounce multiple times before settling.
+This results in multiple unwanted signals being registered when only one press is intended.
+✅ Why Get Rid of It?
+Prevent multiple unwanted actions (e.g., one button press should not register as 3-4 presses).
+Avoid random errors in input detection.
+Make the system more stable and user-friendly.
+__________________________________________________________________________________
+• In which applications/domains, debounce issue can be threatening if not resolved in 
+the system?
+ 
+ANS -Debounce problems can be serious in many real-world applications where precise button input is critical.
+
+⚠️ Applications Affected by Debounce Issues
+Medical Devices 🏥
+Example: Pacemakers or infusion pumps – multiple triggers could be life-threatening.
+Industrial Machines 🏭
+Example: Emergency stop buttons – if a faulty press registers multiple times, it could cause serious accidents.
+Banking & ATMs 💳
+Example: ATM keypad – if a single button press registers multiple times, you might enter the wrong PIN.
+Voting Machines 🗳️
+Example: Electronic voting – accidental multiple votes due to bouncing can cause election fraud.
+Gaming Consoles 🎮
+Example: A single jump in a game shouldn’t turn into multiple jumps due to debounce issues.
+_____________________________________________________________________________________
+
+• Why debounce occurs? Is it a compiler error, logical error or micro-controller is 
+cheap?
+
+ANS
+
+✅ Not a compiler error – The compiler works fine, and it does not cause the bouncing.
+✅ Not because of a cheap microcontroller – Even expensive MCUs need debounce handling.
+✅ It is a logical problem due to hardware limitations – Mechanical switches naturally bounce.
+
+🛠️ Why It Happens?
+Physical spring contacts in the switch cause bouncing.
+The mechanical vibration takes a few milliseconds to settle.
+Electrical noise can cause false multiple readings.
+
+How to Fix Debounce Issues?
+There are two main solutions:
+
+🔹 Software-Based Debounce (Best for Microcontrollers)
+Use a Small Delay (time.sleep(0.2)) – Simple but not ideal.
+Use a Debounce Timer (Timer() in ESP32) – Prevents multiple presses in a short period.
+Use State Checking – Only register a press if the state is stable for a few milliseconds.
+🔹 Hardware-Based Debounce (For More Reliable Systems)
+Use a Capacitor (RC Filter) – Filters out bouncing signals.
+Use Schmitt Trigger Circuits – Ensures only clean transitions are read.
+Use Hardware Debounce ICs – Special chips like the MAX6818 prevent bounce.
+_________________________________________________________________________________________________
+
+Task 4: Why Do We Use Interrupts 
+• Why do we use interrupt? 
+
+An interrupt is a signal that temporarily stops the normal execution of a program to handle a specific event immediately.
+
+✅ Reasons for Using Interrupts:
+Faster Response to Events
+The microcontroller reacts instantly instead of waiting for the next loop cycle.
+Efficient Power Consumption
+The CPU stays idle (low-power mode) until an important event occurs.
+Prevents Missing Important Inputs
+In polling, a button press might be missed if the MCU is busy. Interrupts ensure no input is ignored.
+Better Performance
+Interrupts allow the microcontroller to handle multiple tasks simultaneously.
+Example:
+Imagine you have an automatic door system.
+
+Without interrupts: The system continuously checks (polling) if someone is near, wasting CPU power.
+With interrupts: The sensor instantly notifies the system when someone is detected.
+_____________________________________________________________________________________________________
+• How does interrupt lower the processing cost of the micro-controller? 
+
+Interrupts help reduce unnecessary CPU workload in two main ways:
+
+🔹 Without Interrupts (Polling Method)
+The microcontroller constantly checks (polls) sensors/buttons in a loop.
+This wastes CPU cycles and increases power usage.
+🔹 With Interrupts
+The microcontroller stays idle or runs other tasks.
+It only responds when an important event occurs (e.g., button press, sensor update).
+This saves processing power and makes the system more efficient.
+Example:
+A temperature monitoring system:
+
+Polling: Continuously checks the sensor every few milliseconds (CPU remains busy).
+Interrupt: The system only reads the sensor when a temperature change occurs (CPU free for other tasks).
+______________________________________________________________________________________________________
+✅ Interrupts improve responsiveness and reduce power consumption.
+✅ They make the microcontroller more efficient by avoiding unnecessary processing.
+✅ Used in real-time systems, keyboards, robotics, embedded systems, and power-saving applications.
